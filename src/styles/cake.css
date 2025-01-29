@@ -1,80 +1,111 @@
-.cake-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  }
-  
-  /* 🎙️ Mic Permission Message */
-  .mic-message {
-    position: absolute;
-    top: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-  }
-  
-  /* 🍰 Cake Base */
-  .cake-base {
-    width: 200px;
-    height: 100px;
-    background: #a83232;
-    border-radius: 10px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+/* shoutout to Marco Barría for the Cake styling https://codepen.io/fixcl/pen/bGeWvY */
+
+#cake {
+    display: block;
     position: relative;
-  }
-  
-  /* 🍰 Cake Plate */
-  .cake-plate {
-    width: 250px;
-    height: 20px;
-    background: #d3d3d3;
-    border-radius: 50px;
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  /* 🕯️ Candles */
-  .candle-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-bottom: 20rem;
   }
   
   .candle {
-    width: 10px;
-    height: 40px;
     background: #ffffff;
-    border-radius: 5px;
-    position: relative;
-  }
-  
-  /* 🔥 Flickering Flame */
-  @keyframes flicker {
-    0% { background: rgba(255, 165, 0, 0.9); }
-    50% { background: rgba(255, 69, 0, 0.9); }
-    100% { background: rgba(255, 165, 0, 0.9); }
-  }
-  
-  .flame {
-    width: 8px;
-    height: 20px;
-    background: orange;
-    border-radius: 50%;
+    border-radius: 10px;
     position: absolute;
-    top: -20px;
-    left: 50%;
+    left: 50%; 
+    margin-left: -2.4px; 
+    margin-top: -8.33333333px; 
+    width: 10px; 
+    height: 90px; 
     transform: translateX(-50%);
-    animation: flicker 1.5s infinite alternate;
+    backface-visibility: hidden;
+    animation: slideDown 2s ease-in-out 5s forwards; 
+  
   }
   
+  /* candle decorations */
+  .candle:after,
+  .candle:before {
+    background: rgba(255, 0, 0, 0.4);
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 8px; 
+  }
+  .candle:after {
+    top: 30%; 
+    left: 0;
+  }
+  .candle:before {
+    top: 60%;
+    left: 0;
+  }
+  
+  /* Flame */
+  .flame {
+    border-radius: 100%;
+    position: absolute;
+    top: -25px; 
+    left: 50%;
+    margin-left: -3px; 
+    width: 8px; 
+    height: 24px; 
+  }
+  
+  /* Flame animations */
+  .flame:nth-child(1) {
+    animation: flame 2s 7.5s infinite;
+  }
+  .flame:nth-child(2) {
+    animation: flame 1.5s 7.5s infinite;
+  }
+  .flame:nth-child(3) {
+    animation: flame 1s 7.5s infinite;
+  }
+  .flame:nth-child(4) {
+    animation: flame 0.5s 7.5s infinite;
+  }
+  .flame:nth-child(5) {
+    animation: flame 0.2s 7.5s infinite;
+  }
+    
+  @keyframes flame {
+    0%, 100% {
+      background: rgba(254, 248, 97, 0.5);
+      box-shadow: 0 0 60px 10px rgba(248, 233, 209, 0.9);
+      transform: translateY(-10px) scale(1.4);
+    }
+    50% {
+      background: rgba(255, 50, 0, 0.1);
+      box-shadow: 0 0 40px 20px rgba(248, 233, 209, 0.2);
+      transform: translateY(-20px) scale(0);
+    }
+  }
+  
+  @keyframes in {
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  
+  @keyframes slideDown {
+    0% {
+      top: -100px; 
+    }
+    100% {
+      top: 550px;
+    }
+  }
+  
+
+  .confetti-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../components/confetti.gif');
+    background-size: cover;
+    background-position: center;
+    z-index: 5; /* Ensure it does not overlap interactive elements */
+    pointer-events: none; /* Prevents it from interfering with clicks */
+}

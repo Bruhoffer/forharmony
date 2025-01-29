@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/birthdayvideo.css"; // We will create this later
+import "../styles/birthdayvideo.css";
 
 const BirthdayVideo = () => {
   const navigate = useNavigate();
@@ -15,7 +15,13 @@ const BirthdayVideo = () => {
         Your browser does not support the video tag.
       </video>
 
-      <button className="back-button" onClick={() => navigate("/")}>
+      <button
+        className="back-button"
+        onClick={() => {
+          sessionStorage.setItem("comingBack", "true"); // ✅ Keep Home state
+          navigate("/");
+        }}
+      >
         ← Back to Home
       </button>
     </div>

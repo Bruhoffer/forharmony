@@ -5,59 +5,80 @@ import Cake from "../components/Cake";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [showOptions, setShowOptions] = useState(false);
-  const [showText, setShowText] = useState(false);
+
+  // ✅ Load `showOptions` from sessionStorage OR default to false
+  const [showOptions] = useState(() => {
+    return sessionStorage.getItem("showOptions") === "true";
+  });
+
+  // ✅ `comingBack` is updated from sessionStorage
+  const [comingBack] = useState(
+    sessionStorage.getItem("comingBack") === "true"
+  );
+
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const fullText = "You’re the most amazing person, and this website is just for you. ❤️";
 
+  // ✅ Automatically reload the page when cake is blown out
+  const handleBlowout = () => {
+    sessionStorage.setItem("showOptions", "true"); // ✅ Persist cake-blown-out state
+    window.location.reload(); // ✅ Auto-reload to enforce state persistence
+  };
+
+  // ✅ Update text display when `showOptions` changes
   useEffect(() => {
     if (showOptions) {
-      setTimeout(() => setShowText(true), 1000); // Delay before text appears
-      setTimeout(() => {
+      if (comingBack) {
+        setTypedText(fullText);
+        setShowCursor(false);
+      } else {
         let i = 0;
         const interval = setInterval(() => {
           setTypedText(fullText.slice(0, i));
           i++;
           if (i > fullText.length) {
             clearInterval(interval);
-            setShowCursor(false); // Hide cursor after typing
+            setShowCursor(false);
           }
         }, 50);
-      }, 2500); // Typing effect delay
+      }
     }
-  }, [showOptions]);
-  
-  
+  }, [showOptions, comingBack]);
 
   return (
     <div className="home-container">
       {!showOptions ? (
-        <Cake onBlowoutComplete={() => setShowOptions(true)} />
+        <Cake onBlowoutComplete={handleBlowout} />
       ) : (
         <>
-          {/* Title Appears After Cake Blowout */}
           <h1 className="title animate-fade-in">🎉 Happy Birthday, Harmony! 🎉</h1>
-          
-          {/* Typing Effect for Subtitle */}
-          {showText && (
-            <p className={`subtitle animate-typing ${typedText === fullText ? "complete" : ""}`}>
-                <span dangerouslySetInnerHTML={{ __html: typedText }}></span>
-                {showCursor && <span className="cursor">|</span>}
-            </p>
-            )}
 
-          {/* Buttons Appear After Typing Effect Completes */}
-          {typedText === fullText && (
-            <div className="button-container">
-              <button className="nav-button animate-slide-up" onClick={() => navigate("/drumkit")}>
-                🥁 Explore Drum Kit →
-              </button>
-              <button className="nav-button animate-slide-up" onClick={() => navigate("/birthday-video")}>
-                🎥 Watch Birthday Video →
-              </button>
-            </div>
-          )}
+          <p className={`subtitle ${comingBack ? "instant-text" : "animate-typing"}`}>
+            {typedText}
+            {showCursor && <span className="cursor">|</span>}
+          </p>
+
+          <div className="button-container">
+            <button
+              className="nav-button animate-slide-up"
+              onClick={() => {
+                sessionStorage.setItem("comingBack", "true"); 
+                navigate("/drumkit");
+              }}
+            >
+              🥁 Explore Drum Kit →
+            </button>
+            <button
+              className="nav-button animate-slide-up"
+              onClick={() => {
+                sessionStorage.setItem("comingBack", "true");
+                navigate("/birthday-video");
+              }}
+            >
+              🎥 Watch Birthday Video →
+            </button>
+          </div>
         </>
       )}
     </div>

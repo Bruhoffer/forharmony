@@ -1,113 +1,123 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/cake.css";
+import CakeSVG from "../components/cakesvg";
+import confettiImage from "../components/confetti.gif";
+import { motion } from "framer-motion";
 
-const Cake = ({ onBlowoutComplete }) => {
+function Cake({ onBlowoutComplete }) {
   const [candlesBlownOut, setCandlesBlownOut] = useState(false);
-  const [micPermissionGranted, setMicPermissionGranted] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showCake, setShowCake] = useState(true);
+  const navigate = useNavigate();
 
+  // 🛠 Microphone Detection for Blowout
+  const initBlowDetection = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaStreamSource(stream);
+
+      analyser.fftSize = 512;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      source.connect(analyser);
+
+      let blowStartTime = null;
+
+      function detectBlow() {
+        analyser.getByteFrequencyData(dataArray);
+        const lowFrequencyValues = dataArray.slice(0, 15);
+        const averageLowFrequency = lowFrequencyValues.reduce((sum, value) => sum + value, 0) / lowFrequencyValues.length;
+
+        const blowThreshold = 50;
+        const requiredDuration = 1000;
+
+        if (averageLowFrequency > blowThreshold) {
+          if (!blowStartTime) {
+            blowStartTime = performance.now();
+          } else if (performance.now() - blowStartTime > requiredDuration) {
+            setCandlesBlownOut(true);
+            setShowConfetti(true);
+            setShowCake(false); // Hide Cake After Blowout
+
+            // 🎉 Show confetti for 4 seconds before navigating
+            setTimeout(() => {
+              setShowConfetti(false);
+              onBlowoutComplete(); // Notify Home.js
+              navigate("/"); // Redirect to Home
+            }, 4000);
+          }
+        } else {
+          if (blowStartTime && performance.now() - blowStartTime > 200) {
+            blowStartTime = null;
+          }
+        }
+
+        requestAnimationFrame(detectBlow);
+      }
+
+      detectBlow();
+    } catch (error) {
+      console.error("Microphone access denied:", error);
+    }
+  }, [navigate, onBlowoutComplete]);
+
+  // 🎤 Start microphone detection on mount
   useEffect(() => {
-    let audioContext;
-    let analyser;
-    let dataArray;
-    let blowStartTime = null;
-
-    async function initBlowDetection() {
-      try {
-        // Request mic access
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        setMicPermissionGranted(true); // ✅ Indicate mic access was granted
-
-        // Set up audio analysis
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        const source = audioContext.createMediaStreamSource(stream);
-
-        analyser.fftSize = 512;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-        source.connect(analyser);
-
-        detectBlow();
-      } catch (error) {
-        console.error("Microphone access denied:", error);
-        setMicPermissionGranted(false); // ❌ Mic access denied
-      }
-    }
-
-    function detectBlow() {
-      if (!analyser || !dataArray) return;
-      analyser.getByteFrequencyData(dataArray);
-      const lowFrequencyValues = dataArray.slice(0, 15); // Get low frequencies
-      const averageLowFrequency = lowFrequencyValues.reduce((sum, value) => sum + value, 0) / lowFrequencyValues.length;
-
-      const blowThreshold = 100; // Adjust for sensitivity
-      const requiredDuration = 1000; // Must blow for 1.5 sec
-
-      if (averageLowFrequency > blowThreshold) {
-        if (!blowStartTime) {
-          blowStartTime = performance.now();
-        } else if (performance.now() - blowStartTime > requiredDuration) {
-          setCandlesBlownOut(true);
-          setTimeout(() => onBlowoutComplete(), 2000);
-        }
-      } else {
-        if (blowStartTime && performance.now() - blowStartTime > 200) {
-          blowStartTime = null;
-        }
-      }
-
-      requestAnimationFrame(detectBlow);
-    }
-
-    // Delay mic access request slightly so user isn't overwhelmed
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       initBlowDetection();
-    }, 5000);
+    }, 10000);
 
-    return () => {
-      if (audioContext) {
-        audioContext.close();
-      }
-    };
-  }, [onBlowoutComplete]);
+    return () => clearTimeout(timer);
+  }, [initBlowDetection]);
 
   return (
-    <div className="cake-container">
-      {/* 🎙️ Show mic access message if not granted */}
-      {!micPermissionGranted && (
-        <div className="mic-message">
-          <p>🎙️ Please allow microphone access to blow out the candles!</p>
-        </div>
-      )}
+    <>
+      <div className="bg-black/80 h-screen w-screen flex items-center justify-center overflow-hidden relative">
+        {/* 🎉 Confetti Overlay (Shows Briefly) */}
+        {showConfetti && (
+          <motion.div
+            className="confetti-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundImage: `url(${confettiImage})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              zIndex: 50,
+            }}
+          />
+        )}
 
-      {/* 🎉 Confetti when blown out */}
-      {candlesBlownOut && (
-        <motion.div className="confetti-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} />
-      )}
-      
-      {/* 🎂 Cake Base */}
-      <div className="cake-base">
-        <div className="cake-layer"></div>
-        <div className="cake-layer" style={{ top: "40px" }}></div>
-        <div className="cake-layer" style={{ top: "60px" }}></div>
-
-        {/* 🍽 Plate */}
-        <div className="cake-plate"></div>
-
-        {/* 🕯️ Candles */}
-        {!candlesBlownOut && (
-          <div className="candle-container">
-            <div className="candle"><div className="flame"></div></div>
-            <div className="candle"><div className="flame"></div></div>
-            <div className="candle"><div className="flame"></div></div>
-            <div className="candle"><div className="flame"></div></div>
-            <div className="candle"><div className="flame"></div></div>
+        {/* 🎂 Cake (Only Shows If Not Blown Out) */}
+        {showCake && (
+          <div className="relative z-10">
+            <div className="absolute -top-48 left-1/2 transform -translate-x-1/2">
+              {!candlesBlownOut && (
+                <div className="candle">
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                </div>
+              )}
+            </div>
+            <CakeSVG />
           </div>
         )}
       </div>
-    </div>
+    </>
   );
-};
+}
 
 export default Cake;
