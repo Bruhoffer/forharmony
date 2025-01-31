@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/for-harmony/static/css/main.0731cf81.css",
+    "main.js": "/for-harmony/static/js/main.8357216c.js",
+    "static/js/488.2ca70dc5.chunk.js": "/for-harmony/static/js/488.2ca70dc5.chunk.js",
+    "static/media/confetti.gif": "/for-harmony/static/media/confetti.a096dc4f6d390d25fb7e.gif",
+    "index.html": "/for-harmony/index.html",
+    "main.0731cf81.css.map": "/for-harmony/static/css/main.0731cf81.css.map",
+    "main.8357216c.js.map": "/for-harmony/static/js/main.8357216c.js.map",
+    "488.2ca70dc5.chunk.js.map": "/for-harmony/static/js/488.2ca70dc5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0731cf81.css",
+    "static/js/main.8357216c.js"
+  ]
+}
