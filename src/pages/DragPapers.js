@@ -18,17 +18,15 @@ const DragPapers = () => {
     paper.addEventListener("mousedown", (e) => {
         holdingPaper = true;
         paper.style.zIndex = highestZ++;
-    
-        // ✅ Use `offsetLeft` and `offsetTop` instead of `getBoundingClientRect()`
+
         offsetX = e.clientX - paper.offsetLeft;
         offsetY = e.clientY - paper.offsetTop;
         
-        e.preventDefault(); // Prevents unwanted text selection while dragging
+        e.preventDefault(); 
     });
     
     document.addEventListener("mousemove", (e) => {
         if (holdingPaper) {
-        // ✅ Use `absolute` positioning correctly
         paper.style.left = `${e.clientX - offsetX}px`;
         paper.style.top = `${e.clientY - offsetY}px`;
         }
@@ -51,25 +49,25 @@ const DragPapers = () => {
         <div className="paper image">
           <p> thank you for being you</p>
           <p> </p>
-          <img src="/images/7.JPG" alt="Memory 1" />
+          <img src={`${process.env.PUBLIC_URL}/images/7.JPG`} alt="Memory 1" />
         </div>
 
         <div className="paper image">
           <p> thank you for saving me</p>
           <p> from the world</p>
-          <img src="/images/4.JPG" alt="Memory 1" />
+          <img src={`${process.env.PUBLIC_URL}/images/4.JPG`} alt="Memory 1" />
         </div>
 
         <div className="paper image">
           <p> and the most beautiful memories</p>
           <p> </p>
-          <img src="/images/1.JPG" alt="Memory 1" />
+          <img src={`${process.env.PUBLIC_URL}/images/1.JPG`} alt="Memory 1" />
         </div>
 
         <div className="paper image">
           <p> but when you came along, you</p>
           <p> filled it with love,</p>
-          <img src="/images/2.JPG" alt="Memory 2" />
+          <img src={`${process.env.PUBLIC_URL}/images/2.JPG`} alt="Memory 1" />
         </div>
 
         <div className="paper red">
@@ -87,11 +85,11 @@ const DragPapers = () => {
         </div>
       </div>
 
-      {/* ✅ Back Button to Home */}
+      {/* Back Button to Home */}
       <button
         className="back-button"
         onClick={() => {
-          sessionStorage.setItem("comingBack", "true"); // ✅ Keep Home state
+          sessionStorage.setItem("comingBack", "true"); // Keep Home state
           navigate("/");
         }}
       >
