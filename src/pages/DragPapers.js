@@ -49,25 +49,28 @@ const DragPapers = () => {
         <div className="paper image">
           <p> thank you for being you</p>
           <p> </p>
-          <img src="forharmony/images/7.JPG" alt="Memory 1" />
+          <img src="https://bruhoffer.github.io/forharmony/images/7.JPG" alt="Memory 1" />
         </div>
 
         <div className="paper image">
           <p> thank you for saving me</p>
           <p> from the world</p>
-          <img src="forharmony/images/4.JPG" alt="Memory 2" />
+          <img src="https://bruhoffer.github.io/forharmony/images/4.JPG" alt="Memory 2" />
+
         </div>
 
         <div className="paper image">
           <p> and the most beautiful memories</p>
           <p> </p>
-          <img src="forharmony/images/1.JPG" alt="Memory 3" />
+          <img src="https://bruhoffer.github.io/forharmony/images/1.JPG" alt="Memory 3" />
+
         </div>
 
         <div className="paper image">
           <p> but when you came along, you</p>
           <p> filled it with love,</p>
-          <img src="forharmony/images/2.JPG" alt="Memory 4" />
+          <img src="https://bruhoffer.github.io/forharmony/images/2.JPG" alt="Memory 4" />
+
         </div>
 
         <div className="paper red">
