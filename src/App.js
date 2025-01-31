@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import DrumKit from "./pages/DrumKit";
+import DragPapers from "./pages/DragPapers";
 import BirthdayVideo from "./pages/BirthdayVideo";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/drumkit" element={<DrumKit />} />
+        <Route path="/drag-papers" element={<DragPapers />} />
         <Route path="/birthday-video" element={<BirthdayVideo />} />
       </Routes>
     </Router>

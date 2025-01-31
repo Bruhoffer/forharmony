@@ -18,7 +18,7 @@ const Home = () => {
 
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
-  const fullText = "You’re the most amazing person, and this website is just for you. ❤️";
+  const fullText = "you’re my favourite person, and i hope you like this gift. ❤️";
 
   // ✅ Automatically reload the page when cake is blown out
   const handleBlowout = () => {
@@ -52,7 +52,7 @@ const Home = () => {
         <Cake onBlowoutComplete={handleBlowout} />
       ) : (
         <>
-          <h1 className="title animate-fade-in">🎉 Happy Birthday, Harmony! 🎉</h1>
+          <h1 className="title animate-fade-in">🎉 happy 21st birthday, harmony! 🎉</h1>
 
           <p className={`subtitle ${comingBack ? "instant-text" : "animate-typing"}`}>
             {typedText}
@@ -64,10 +64,10 @@ const Home = () => {
               className="nav-button animate-slide-up"
               onClick={() => {
                 sessionStorage.setItem("comingBack", "true"); 
-                navigate("/drumkit");
+                navigate("/drag-papers");
               }}
             >
-              🥁 Explore Drum Kit →
+              Drag the Papers →
             </button>
             <button
               className="nav-button animate-slide-up"
