@@ -11,9 +11,11 @@ const BirthdayVideo = () => {
       <p>Here’s a special video just for you!</p>
 
       <video width="600" controls>
-        <source src="your-video-url.mp4" type="video/mp4" />
+        <source src="https://drive.google.com/file/d/17pXyxvM8p9Mrf3ud9TQS4R2SkywsblOc/view?usp=sharing" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+      <br />
+      <br />
 
       <button
         className="back-button"
