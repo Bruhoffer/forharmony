@@ -10,10 +10,17 @@ const BirthdayVideo = () => {
       <h1>🎥 Happy Birthday, Harmony! 🎥</h1>
       <p>Here’s a special video just for you!</p>
 
-      <video width="600" controls>
-        <source src="https://drive.google.com/file/d/17pXyxvM8p9Mrf3ud9TQS4R2SkywsblOc/view?usp=sharing" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <iframe
+        width="600"
+        height="400"
+        src="https://drive.google.com/file/d/17pXyxvM8p9Mrf3ud9TQS4R2SkywsblOc/preview"
+        title="Birthday Video for Harmony"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+
+
       <br />
       <br />
 
